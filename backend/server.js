@@ -4,13 +4,16 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path'; // Correctly import the path module
+import { fileURLToPath } from 'url'; // Import for ES module path resolution
+
 dotenv.config();
 
 // Import middleware
 import verifyJWT from './middleware/jwtMiddleware.js';
 import verifyTokenRoute from './Routes/v2/routes/verifyToken.routes.js';
 
-//routes import
+// Routes import
 import authRoutes from './Routes/auth.routes.js';
 import tenantRoutes from './Routes/tenant.routes.js';
 import landLordRoutes from './Routes/landLord.routes.js';
@@ -19,18 +22,18 @@ import housesRoutes from './Routes/house.routes.js';
 import kraRoutes from './Routes/kra.routes.js';
 import apartmentRoutes from './Routes/v2/routes/Apartment.routes.js';
 
-//v2 tenants
+// v2 tenants
 import v2TenantRoutes from './Routes/v2/routes/tenant.routes.js';
 import v2PaymentRoutes from './Routes/v2/routes/payment.routes.js';
 import InvoiceRoutes from './Routes/v2/routes/invoice.routes.js';
 import floorRoutes from './Routes/v2/routes/floor.routes.js';
-
 import clearanceRoutes from './Routes/v2/routes/clearance.routes.js';
 import { restoreScheduledJobs } from './controllers/v2/controllers/tenant.controller.js';
 
 const app = express();
 const port = process.env.PORT || 5500;
-//middleware
+
+// Middleware
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -45,23 +48,23 @@ app.use(cookieParser());
 // Apply the JWT middleware globally (except for /api/auth)
 app.use(verifyJWT);
 
-//db connection
+// DB connection
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => {
-    console.log('success db connection');
+    console.log('Success db connection');
     // Call to restore any scheduled jobs on server startup
     restoreScheduledJobs();
 
     app.listen(port, () => {
-      console.log(`server listening on port ${port}`);
+      console.log(`Server listening on port ${port}`);
     });
   })
   .catch((err) => {
-    console.log('error connecting to db: ', err);
+    console.log('Error connecting to db: ', err);
   });
 
-//routes
+// Routes
 app.use('/api/jwt', verifyTokenRoute);
 app.use('/api/auth', authRoutes);
 app.use('/api/tenants', tenantRoutes);
@@ -70,7 +73,7 @@ app.use('/api/payments', paymentsRoutes);
 app.use('/api/houses', housesRoutes);
 app.use('/api/kra', kraRoutes);
 
-//v2 routes
+// v2 routes
 app.use('/api/v2/tenants', v2TenantRoutes);
 app.use('/api/v2/payments', v2PaymentRoutes);
 app.use('/api/v2/apartments', apartmentRoutes);
@@ -78,12 +81,13 @@ app.use('/api/v2/invoices', InvoiceRoutes);
 app.use('/api/v2/clearance', clearanceRoutes);
 app.use('/api/v2/floors', floorRoutes);
 
-const path = require('path');
-
 // Serve the static files from the React app (after building it)
-app.use(express.static(path.join(__dirname, 'build')));
+const __filename = fileURLToPath(import.meta.url); // Get the filename
+const __dirname = path.dirname(__filename); // Get the directory name
+
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Handle any other routes and serve index.html (React's entry point)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
