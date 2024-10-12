@@ -85,9 +85,9 @@ app.use('/api/v2/floors', floorRoutes);
 const __filename = fileURLToPath(import.meta.url); // Get the filename
 const __dirname = path.dirname(__filename); // Get the directory name
 
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Handle any other routes and serve index.html (React's entry point)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
