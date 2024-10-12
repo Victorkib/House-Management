@@ -44,6 +44,7 @@ import { checkTokenValidity } from './utils/checkAuth.js';
 import TokenExpiredPopup from './components/JwtExpirePopup/TokenExpiredPopup.jsx';
 
 function App() {
+  //jwt verification
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
