@@ -77,3 +77,13 @@ app.use('/api/v2/apartments', apartmentRoutes);
 app.use('/api/v2/invoices', InvoiceRoutes);
 app.use('/api/v2/clearance', clearanceRoutes);
 app.use('/api/v2/floors', floorRoutes);
+
+const path = require('path');
+
+// Serve the static files from the React app (after building it)
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Handle any other routes and serve index.html (React's entry point)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
