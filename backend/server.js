@@ -64,5 +64,5 @@ app.use('/api', apiRoutes);
 
 // Handle any other routes and serve index.html (React's entry point)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../dist', 'index.html'));
 });
