@@ -1509,11 +1509,12 @@ export const sendTenantAndOwnerEmails = async (req, res) => {
     // Fetch tenant information and their most recent payment
     const tenant = await Tenant.findById(tenantId).populate('apartmentId');
 
-    const recentPayment = await Payment.findOne({ tenant: tenantId }).sort({
-      createdAt: -1,
-    });
+    // const recentPayment = await Payment.findOne({ tenant: tenantId }).sort({
+    //   createdAt: -1,
+    // });
 
-    if (!tenant || !recentPayment) {
+    if (!tenant) {
+      return res.status(404).json({ message: 'No such Tenant Found!.' });
     }
 
     const recentClearance = await Clearance.find({ tenant: tenantId }).sort({

@@ -74,12 +74,15 @@ export const login = async (req, res) => {
   try {
     // Check if the user exists
     const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ message: 'Invalid Credentials!' });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid Credentials!' });
+    }
 
     // Check if the password is correct
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
+    if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid Credentials!' });
+    }
 
     // Generate tokens based on rememberMe option
     const { accessToken, expiresIn } = generateTokens(user);

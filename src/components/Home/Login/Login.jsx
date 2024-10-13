@@ -29,7 +29,8 @@ function Login() {
           setAdminFromBc(response.data);
         }
       } catch (error) {
-        setError(error.response.data.message);
+        console.log('error: ', error);
+        setError(error?.response?.data?.message);
       }
     };
     checkIfthereIsAnUserLoggedIn();
@@ -56,7 +57,9 @@ function Login() {
       }
     } catch (err) {
       setLoading(false);
-      toast.error(error.response.data.message || 'Failed To login!');
+
+      console.log('error: ', error);
+      toast.error(error?.response?.data?.message || 'Failed To login!');
       setError(err.response?.data?.message || 'Failed to login.');
     }
   };
