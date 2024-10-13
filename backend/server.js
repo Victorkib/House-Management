@@ -48,6 +48,12 @@ app.use(cookieParser());
 // Apply the JWT middleware globally (except for /api/auth)
 app.use(verifyJWT);
 
+// Serve the static files from the React app (after building it)
+const __filename = fileURLToPath(import.meta.url); // Get the filename
+const __dirname = path.dirname(__filename); // Get the directory name
+
+app.use(express.static(path.join(__dirname, '../dist')));
+
 // DB connection
 mongoose
   .connect(process.env.DATABASE_URL)
@@ -80,12 +86,6 @@ app.use('/api/v2/apartments', apartmentRoutes);
 app.use('/api/v2/invoices', InvoiceRoutes);
 app.use('/api/v2/clearance', clearanceRoutes);
 app.use('/api/v2/floors', floorRoutes);
-
-// Serve the static files from the React app (after building it)
-const __filename = fileURLToPath(import.meta.url); // Get the filename
-const __dirname = path.dirname(__filename); // Get the directory name
-
-app.use(express.static(path.join(__dirname, '../dist')));
 
 // Handle any other routes and serve index.html (React's entry point)
 app.get('*', (req, res) => {
