@@ -9,10 +9,9 @@ import { fileURLToPath } from 'url'; // Import for ES module path resolution
 
 dotenv.config();
 
-//api Routes
+// API Routes
 import apiRoutes from './Routes/v2/ApiRoutes/apiRoutes.routes.js';
 import { restoreScheduledJobs } from './controllers/v2/controllers/tenant.controller.js';
-import verifyJWT from './middleware/jwtMiddleware.js';
 
 const app = express();
 const port = process.env.PORT || 5500;
@@ -38,15 +37,6 @@ app.use(express.json()); // To handle JSON data
 app.use(express.urlencoded({ extended: true })); // To handle form data
 app.use(cookieParser());
 
-// Serve the static files from the React app (after building it)
-const __filename = fileURLToPath(import.meta.url); // Get the filename
-const __dirname = path.dirname(__filename); // Get the directory name
-
-app.use(express.static(path.join(__dirname, '../dist')));
-
-// Apply the JWT middleware globally (except for /api/auth)
-app.use(verifyJWT);
-
 // DB connection
 mongoose
   .connect(process.env.DATABASE_URL)
@@ -55,6 +45,7 @@ mongoose
     // Call to restore any scheduled jobs on server startup
     restoreScheduledJobs();
 
+    // Start the server
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);
     });
@@ -63,7 +54,12 @@ mongoose
     console.log('Error connecting to db: ', err);
   });
 
-//api Routes
+// Serve the static files from the React app (after building it)
+const __filename = fileURLToPath(import.meta.url); // Get the filename
+const __dirname = path.dirname(__filename); // Get the directory name
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// API Routes (before handling frontend routes)
 app.use('/api', apiRoutes);
 
 // Handle any other routes and serve index.html (React's entry point)
