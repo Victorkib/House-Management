@@ -95,7 +95,7 @@ export const login = async (req, res) => {
         httpOnly: true,
         maxAge: expiresIn,
         secure: true, // Set to true if using HTTPS
-        sameSite: 'None', // Adjust as per your security requirements
+        sameSite: 'strict', // Adjust as per your security requirements
       })
       .json(user);
   } catch (err) {
