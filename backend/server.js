@@ -57,12 +57,15 @@ mongoose
 // Serve the static files from the React app (after building it)
 const __filename = fileURLToPath(import.meta.url); // Get the filename
 const __dirname = path.dirname(__filename); // Get the directory name
-app.use(express.static(path.join(__dirname, '../../../dist')));
+app.use(express.static(path.join(__dirname, '../../dist')));
+
+console.log('Static path: ', path.join(__dirname, '../../dist'));
+console.log('Index path: ', path.join(__dirname, '../../dist', 'index.html'));
 
 // API Routes (before handling frontend routes)
 app.use('/api', apiRoutes);
 
 // Handle any other routes and serve index.html (React's entry point)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../../dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../dist', 'index.html'));
 });
