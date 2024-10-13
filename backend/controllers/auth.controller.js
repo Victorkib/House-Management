@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 const generateTokens = (user) => {
   const age = 1000 * 60 * 60 * 24 * 30; // 30 days
   const accessToken = jwt.sign(
-    { id: user._id, isAdmin: false },
+    { id: user._id, isAdmin: user.role },
     process.env.JWT_SECRET_KEY,
     { expiresIn: age }
   );

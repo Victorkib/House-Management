@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-// 'http://localhost:5500/api',
-// 'https://residential-0bacf0736179.herokuapp.com/api',
+// const devUrl = 'http://localhost:5500/api';
+const prodUrl = 'https://residential-0bacf0736179.herokuapp.com/api';
+
 const apiRequest = axios.create({
-  baseURL: 'https://residential-0bacf0736179.herokuapp.com/api',
+  baseURL: prodUrl,
   withCredentials: true,
 });
 
