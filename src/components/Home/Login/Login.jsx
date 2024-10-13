@@ -22,6 +22,7 @@ function Login() {
 
   useEffect(() => {
     const checkIfthereIsAnUserLoggedIn = async () => {
+      setLoading(true);
       try {
         const response = await apiRequest.get('/auth/getAdmins');
         if (response.status) {
@@ -31,6 +32,8 @@ function Login() {
       } catch (error) {
         console.log('error: ', error);
         setError(error?.response?.data?.message);
+      } finally {
+        setLoading(false);
       }
     };
     checkIfthereIsAnUserLoggedIn();
