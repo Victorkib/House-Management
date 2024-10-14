@@ -17,7 +17,15 @@ const app = express();
 const port = process.env.PORT || 5500;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://rvhms.netlify.app',
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
+  })
+);
 
 // app.use((req, res, next) => {
 //   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
